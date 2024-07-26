@@ -1,6 +1,6 @@
-import User from "../models/userModel.js";
-/* READ */
+import User from "../models/User.js";
 
+/* READ */
 export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -36,8 +36,7 @@ export const addRemoveFriend = async (req, res) => {
     const { id, friendId } = req.params;
     const user = await User.findById(id);
     const friend = await User.findById(friendId);
-    console.log("this is user from addremove frined", user);
-    console.log("this is friend from addremove frined", friend);
+
     if (user.friends.includes(friendId)) {
       user.friends = user.friends.filter((id) => id !== friendId);
       friend.friends = friend.friends.filter((id) => id !== id);

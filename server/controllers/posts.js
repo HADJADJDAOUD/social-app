@@ -1,5 +1,5 @@
-import Post from "../models/postModel.js";
-import User from "../models/userModel.js";
+import Post from "../models/Post.js";
+import User from "../models/User.js";
 
 /* CREATE */
 export const createPost = async (req, res) => {
@@ -25,12 +25,13 @@ export const createPost = async (req, res) => {
     res.status(409).json({ message: err.message });
   }
 };
+
+/* READ */
 export const getFeedPosts = async (req, res) => {
   try {
-    const posts = await Post.find();
-    res.status(200).json(posts);
+    const post = await Post.find();
+    res.status(200).json(post);
   } catch (err) {
-    console.error("Error fetching feed posts:", err);
     res.status(404).json({ message: err.message });
   }
 };
@@ -38,10 +39,9 @@ export const getFeedPosts = async (req, res) => {
 export const getUserPosts = async (req, res) => {
   try {
     const { userId } = req.params;
-    const posts = await Post.find({ userId });
-    res.status(200).json(posts);
+    const post = await Post.find({ userId });
+    res.status(200).json(post);
   } catch (err) {
-    console.error("Error fetching user posts:", err);
     res.status(404).json({ message: err.message });
   }
 };
@@ -52,11 +52,6 @@ export const likePost = async (req, res) => {
     const { id } = req.params;
     const { userId } = req.body;
     const post = await Post.findById(id);
-
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" });
-    }
-
     const isLiked = post.likes.get(userId);
 
     if (isLiked) {
@@ -73,7 +68,6 @@ export const likePost = async (req, res) => {
 
     res.status(200).json(updatedPost);
   } catch (err) {
-    console.error("Error liking post:", err);
     res.status(404).json({ message: err.message });
   }
 };
